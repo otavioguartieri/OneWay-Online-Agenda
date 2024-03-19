@@ -1,0 +1,88 @@
+:root{
+    --boxdefaultsize:calc(100% - 10px);
+    --menuWidth: 300px;
+    --menuItemHeight: 50px;
+}
+html,body{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100%;
+}
+.content{
+    width: 100%;
+    height:100%;
+    display: flex;
+}
+.menu{
+    width: var(--menuWidth);
+    background: #eee;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-right: 1px solid #ccc;
+}
+.menu .menu-content{
+    overflow-y: scroll;
+}
+.menu .menu-item{
+    width: 100%;
+    height: var(--menuItemHeight);
+    padding: 0px 20px;
+    background-color: inherit;
+    user-select: none;
+    box-sizing: border-box;
+}
+.menu .menu-item .title{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    font-size: 18px;
+    color: #333;
+    align-items: center;
+    box-sizing: border-box;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.menu .menu-item:not(:last-child) .title{
+    border-bottom: 1px solid #ccc;
+}
+.menu .menu-item:hover{
+    cursor: pointer;
+    background-color: #ddd;
+}
+.menu .menu-item:active{
+    background-color: #ccc;
+}
+.menu .menu-item#createNote{
+    filter: brightness(0.92);
+}
+.menu .menu-item#createNote .title{
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid #ccc;
+    padding-bottom: 8px;
+}
+.tab{
+    width: calc(100% - var(--menuWidth));
+    position: relative;
+}
+#textarea{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    font-weight: 600;
+    font-size: 20px;
+    resize:none;
+    outline:none;
+    width: 100%;
+    height:100%;
+    box-sizing:border-box;
+    position: absolute;
+    border: 0px;
+}
