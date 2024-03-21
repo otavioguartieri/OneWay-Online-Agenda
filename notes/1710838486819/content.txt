@@ -1,6 +1,0 @@
-{
-    "note_content": "teste 2",
-    "note_launch": 1,
-    "note_id": "e559fc1caa3f609f2339a7808c1fdc1a",
-    "note_title": "e559fc1caa3f609f2339a7808c1fdc1a"
-}

@@ -1,7 +1,8 @@
 :root{
     --boxdefaultsize:calc(100% - 10px);
     --menuWidth: 300px;
-    --menuItemHeight: 50px;
+    --menuItemHeight: 40px;
+    --menuMargin: 7px;
 }
 html,body{
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -25,18 +26,45 @@ html,body{
 }
 .menu .menu-content{
     overflow-y: scroll;
+    overflow-x: hidden;
+    height: 100%;
+}
+.menu .menu-content::-webkit-scrollbar {
+    width: 0px;               /* width of the entire scrollbar */
+}
+
+.menu .menu-content::-webkit-scrollbar-track {
+    background: #00000000;        /* color of the tracking area */
+}
+
+.menu .menu-content::-webkit-scrollbar-thumb {
+    background-color: #bbb;    /* color of the scroll thumb */
+    border-radius: 100px;       /* roundness of the scroll thumb */
+    border: 1px solid #ddd;   /* creates padding around scroll thumb */
 }
 .menu .menu-item{
-    width: 100%;
+    width: calc(100% - calc(var(--menuMargin) * 2));
     height: var(--menuItemHeight);
-    padding: 0px 20px;
+    padding: 0px 3px 0px 15px;
     background-color: inherit;
     user-select: none;
     box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: var(--menuMargin);
+    border-radius: 4px;
+}
+.menu .menu-item:hover{
+    cursor: pointer;
+    background-color: #00000022;
+}
+.menu .menu-item.active{
+    background-color: #0066ff22;
 }
 .menu .menu-item .title{
     height: 100%;
-    width: 100%;
+    width: fit-content;
     display: flex;
     font-size: 18px;
     color: #333;
@@ -47,27 +75,37 @@ html,body{
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.menu .menu-item:not(:last-child) .title{
-    border-bottom: 1px solid #ccc;
+.menu .menu-item .delete{
+    background: #00000000;
+    width: calc(var(--menuItemHeight) - 6px);
+    height: calc(var(--menuItemHeight) - 6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    color: #00000055;
 }
-.menu .menu-item:hover{
-    cursor: pointer;
-    background-color: #ddd;
+.menu .menu-item .delete:hover{
+    background: red;
+    color: #fff;
 }
 .menu .menu-item:active{
     background-color: #ccc;
 }
-.menu .menu-item#createNote{
+.menu .menu-item#noteCreate{
     filter: brightness(0.92);
+    padding: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-.menu .menu-item#createNote .title{
+.menu .menu-item#noteCreate .title{
     font-weight: 700;
     font-size: 30px;
     line-height: 0px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-top: 1px solid #ccc;
     padding-bottom: 8px;
 }
 .tab{
