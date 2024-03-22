@@ -12,7 +12,7 @@
     <div class="content">
         <div class="menu">
             <div class="menu-content"></div>
-            <div class="menu-item" id="noteCreate" onclick="noteCreate();"><div class="title">+</div></div>
+            <div class="menu-item" id="noteCreate" onclick="note('create');"><div class="title">+</div></div>
         </div>
         <div class="tab">
             <textarea oninput="contentReg();" disabled  note-id="" id="textarea"></textarea>
@@ -27,55 +27,61 @@
 
     $(document).ready(()=>{
         /* contentGet(); */
-        noteGet();
+        note('list');
     });
     function noteClear(){
         $('#textarea').attr('note-id','').val('').attr('disabled',true);
     }
-    function contentReg(){
+    function contentReg(){ /* registra conteudo da nota no banco (texto) */
         $.post("/modules/contentReg.php",{change:$('#textarea').val(),id:$('#textarea').attr('note-id')});
         sync = 0;
+        
     }
-    function contentGet(){
-        $.post("/modules/contentGet.php",{id:$('#textarea').attr('note-id')}, function( data ) {
-            $('#textarea').val(data.data['note_content']).attr('disabled',false);
+    function listNote(id,title){
+        $('.menu .menu-content').append(`<div class="menu-item" note-id="${id}" onclick="note('get',${id});"><div class="title">${title}</div><div class="delete" onclick="noteRemove($(this).parent());" ><i class="fa-solid fa-trash"></i></div></div>`);
+    }
+    function note(action,id = null) {
+        $.post("modules/note.php",{
+            action: action,
+            data: $('#textarea').val(),
+            title: "Nova anotação",
+            id: id
+        },
+        function(data){
+            console.log(data)
+            if (data.result < 0) return;
+            switch(action){
+                case 'send':
+
+                break;
+                case 'get':
+                    $('.menu-item').removeClass('active');
+                    $(`.menu-item[note-id="${id}"]`).addClass('active');
+                    $('#textarea').attr('note-id',id);
+                    $('#textarea').val(data.data['data']).attr('disabled',false);
+                    setTimeout(() => {
+                        $('#textarea').focus();
+                    }, 100);
+                break;
+                case 'list':
+                    $(data.data).each(function(key,value){
+                        listNote(value['id'],value['title']);
+                    });
+                break;
+                case 'create':
+                    listNote(data.data['id'],data.data['title']);
+                break;
+            }
         });
     }
-    function contentDefine(e){
-        $('.menu-item').removeClass('active');
-        $(e).addClass('active');
-        $('#textarea').attr('note-id',$(e).attr('note-id'));
-        contentGet();
-        setTimeout(() => {
-            $('#textarea').focus();
-        }, 100);
-    }
-    function noteCreate(){
-        var time = new Date().getTime();
-        $.post("/modules/noteCreate.php",{id:time.toString()});
-        setTimeout(() => {
-            noteGet();
-        }, 100);
-    }
-    function noteRemove(e){
+    function noteRemove(e){ /* desativa a nota no sistema (banco) */
         $.post("/modules/noteRemove.php",{id:$(e).attr('note-id')});
         setTimeout(() => {
             noteClear();
             noteGet();
         }, 100);
     }
-    function noteGet(){
-        $('.menu .menu-content').html('');
-        $.post("/modules/noteGet.php",null,function(data){
-            if(data.result == 1){
-                $(data.data).each(function(key,value){
-                    if(value[1]['note_launch'] == 1)
-                    $('.menu .menu-content').append(`<div class="menu-item" note-id="${value[1]['note_id']}" onclick="contentDefine($(this));"><div class="title">${value[1]['note_title']}</div><div class="delete" onclick="noteRemove($(this).parent());" ><i class="fa-solid fa-trash"></i></div></div>`)
-                });
-            }
-        });
-    }
-    setInterval(() => {
+    /* setInterval(() => {
         sync += 1;
         if($('#textarea').attr('note-id'))
         if(sync >= (syncTime * 10)){
@@ -83,5 +89,5 @@
             console.log('sync');
             sync = 0;
         }
-    }, 100);
+    }, 100); */
 </script>
